@@ -9,7 +9,7 @@ export class MmrCommand implements ITwitchCommand {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	public handler: TwitchCommandHandler = (channel, userstate, message): void => {
 		const client = TwitchClient.getInstance();
-		axios.get(`https://api.opendota.com/api/players/${process.env.STEAM64_ID}`).then(
+		axios.get(`https://api.opendota.com/api/players/${process.env.STEAM_ID_32}`).then(
 			response => {
 				const soloCompetitiveRank = response.data.solo_competitive_rank;
 				let emote: string;

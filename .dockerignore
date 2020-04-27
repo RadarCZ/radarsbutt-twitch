@@ -3,3 +3,4 @@ npm_debug.log
 dist
 logs
 *.log
+*.example
