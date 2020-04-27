@@ -1,0 +1,26 @@
+#table-wrapper {
+	width: 100%;
+}
+
+#commands-table {
+	width: 80%;
+	background-color: #181A1B;
+	border-collapse: collapse;
+	border-width: 2px;
+	border-color: rgb(22, 105, 20);
+	border-style: inset;
+	color: #ffffff;
+	margin: 100px auto 0px auto;
+}
+  
+#commands-table td, #commands-table th {
+	border-width: 2px;
+	border-color: rgb(22, 105, 20);
+	border-style: inset;
+	padding: 10px;
+}
+  
+#commands-table thead {
+	background-color: #85E783;
+	color: #000000;
+}

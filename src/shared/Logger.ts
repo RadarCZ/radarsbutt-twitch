@@ -41,7 +41,7 @@ if (process.env.NODE_ENV === 'production') {
 
     const errorStackFormat = format((info) => {
         if (info.stack) {
-            // tslint:disable-next-line:no-console
+            // eslint-disable-next-line
             console.log(info.stack);
             return false;
         }

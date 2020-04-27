@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+    main:
+        build: .
+        restart: unless-stopped
+        image: radarcz/radarsbutt-twitch
+        ports:
+            - 127.0.0.1:80:8081
+        stdin_open: true
+        network_mode: bridge

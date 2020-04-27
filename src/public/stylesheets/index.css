@@ -1,0 +1,13 @@
+#twitch-wrapper {
+	position: relative;
+	top: 60px;
+	text-align: center;
+}
+
+#twitch-wrapper {
+	font-weight: bold;
+}
+
+#twitch-embed {
+	margin-top: 10px;
+}

@@ -13,9 +13,6 @@
     "target": "es6",
     "moduleResolution": "node",
     "paths": {
-      "@daos/*": [
-        "src/daos/*"
-      ],
       "@entities/*": [
         "src/entities/*"
       ],
@@ -24,7 +21,10 @@
       ],
       "@server": [
         "src/Server"
-      ]
+	  ],
+	  "@twitch": [
+		  "src/twitch"
+	  ]
     },
     "types": [
       "node"

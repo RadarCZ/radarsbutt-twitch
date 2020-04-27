@@ -1,0 +1,7 @@
+<ul id="top-menu">
+	{{#each @links}}
+	<li {{#if (strings_equal @activePage name)}}class='active'{{/if}}>
+		<a href="{{ href }}">{{ title }}</a>
+	</li>
+	{{/each}}
+</ul>

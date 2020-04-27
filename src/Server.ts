@@ -3,22 +3,16 @@ import morgan from 'morgan';
 import path from 'path';
 import helmet from 'helmet';
 
-import express, { Request, Response, NextFunction } from 'express';
-import { BAD_REQUEST } from 'http-status-codes';
+import express, { Request, Response } from 'express';
 import 'express-async-errors';
-
-import BaseRouter from './routes';
+import { registerHelpers, buildMenu, registerCommands } from '@shared/functions';
+import { TwitchOptions } from './twitch/TwitchOptions';
+import { TwitchClient } from './twitch/TwitchClient';
 import logger from '@shared/Logger';
-
+import { Handlers } from './twitch/Handlers';
 
 // Init express
 const app = express();
-
-
-
-/************************************************************************************
- *                              Set basic express settings
- ***********************************************************************************/
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
@@ -34,30 +28,39 @@ if (process.env.NODE_ENV === 'production') {
     app.use(helmet());
 }
 
-// Add APIs
-app.use('/api', BaseRouter);
+const hbs = registerHelpers();
+hbs.localsAsTemplateData(app);
 
-// Print API errors
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-    logger.error(err.message, err);
-    return res.status(BAD_REQUEST).json({
-        error: err.message,
-    });
-});
-
-
-
-/************************************************************************************
- *                              Serve front-end content
- ***********************************************************************************/
-
+app.set('view engine', 'hbs');
 const viewsDir = path.join(__dirname, 'views');
 app.set('views', viewsDir);
+
+hbs.registerPartials(path.join(viewsDir, 'partials'));
+
 const staticDir = path.join(__dirname, 'public');
 app.use(express.static(staticDir));
-app.get('*', (req: Request, res: Response) => {
-    res.sendFile('index.html', {root: viewsDir});
+
+app.get('/', (req: Request, res: Response) => {
+	app.locals.activePage = 'index';
+	res.render('index', { title: 'Main page' });
 });
 
-// Export express instance
+app.get('/commands', (req: Request, res: Response) => {
+	app.locals.activePage = 'commands';
+	res.render('commands', { title: 'Commands' });
+});
+
+buildMenu(app);
+registerCommands(app);
+
+if (!!process.env.TWITCH_BOT_USERNAME
+	&& process.env.TWITCH_BOT_OAUTH
+	&& process.env.TWITCH_CHANNEL_NAME) {
+  const options = new TwitchOptions(process.env.TWITCH_BOT_USERNAME, process.env.TWITCH_BOT_OAUTH, process.env.TWITCH_CHANNEL_NAME);
+  TwitchClient.create(options, Handlers);
+  TwitchClient.getInstance().connect();
+} else {
+  logger.warn('Unable to connect to Twitch, missing credentials (TWITCH_BOT_USERNAME, TWITCH_BOT_OAUTH, TWITCH_CHANNEL_NAME)');
+}
+
 export default app;

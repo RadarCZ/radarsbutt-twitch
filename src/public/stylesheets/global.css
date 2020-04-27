@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu&family=Ubuntu+Condensed&display=swap');
+
+body {
+	font-family: 'Ubuntu', sans-serif;
+	color: white;
+	background-color: #181a1b;
+}
+
+#top-menu {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    text-align: center;
+    background-color: #85e783;
+    color: black;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+#top-menu > li {
+    display: inline-block;
+    height: 50px;
+}
+
+#top-menu > li > a {
+	display: block;
+	padding: 0 8px;
+    text-decoration: none;
+    color: inherit;
+	text-transform: uppercase;
+	line-height: 50px;
+	transition: background-color .5s, color .5s;
+}
+
+#top-menu > li  a:hover {
+	color: white;
+	background-color: rgb(22, 105, 20);
+}
+
+#top-menu > li.active a {
+	color: white;
+	background-color: rgb(22, 105, 20)
+}
