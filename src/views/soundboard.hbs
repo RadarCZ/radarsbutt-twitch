@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>{{ title }} - Radar's Butt's Web</title>
+	{{> styles }}
+</head>
+
+<body>
+	<audio id='playsound' autoplay />
+	<script>
+		const port = {{ websocketPort }}
+		const messageContainer = document.querySelector('#server-message');
+		const ws = new WebSocket(`ws://${location.host}:${port}`);
+
+		// event emmited when connected
+		ws.onopen = function () {
+			//console.log('websocket is connected ...')
+
+			// sending a send event to websocket server
+			ws.send('connected')
+		}
+
+		// event emmited when receiving message 
+		ws.onmessage = function (ev) {
+			const audioTag = document.querySelector('#playsound');
+			audioTag.setAttribute('src', `/soundboard/${ev.data}.wav`);
+			audioTag.onended = (event) => {
+				location.reload();
+			}
+		}
+	</script>
+</body>
+
+</html>

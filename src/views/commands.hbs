@@ -1,26 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8">
-		<title>{{ title }} - Radar's Butt's Web</title>
-		{{> styles }}
-	</head>
-	<body>
-		{{> top_menu }}
-		<div id="table-wrapper">
-			<table id="commands-table">
-				<thead>
-					<tr>
-						<th>Command</th>
-						<th>Description</th>
-					</tr>
-				</thead>
-				<tbody>
-					{{#each @commands as |command|}}
-						{{> command_line command=command }}
-					{{/each}}
-				</tbody>
-			</table>
-		</div>
-	</body>
+
+<head>
+	<meta charset="UTF-8">
+	<title>{{ title }} - Radar's Butt's Web</title>
+	{{> styles }}
+</head>
+
+<body>
+	{{> top_menu }}
+	<div id="table-wrapper">
+		<table id="hbs-table">
+			<thead>
+				<tr>
+					<th>Command</th>
+					<th>Description</th>
+				</tr>
+			</thead>
+			<tbody>
+				{{#each @commands as |command|}}
+				{{> command_line command=command }}
+				{{/each}}
+			</tbody>
+		</table>
+	</div>
+</body>
+
 </html>

@@ -32,4 +32,8 @@ export class TwitchClient {
 	public say(target: string, message: string): Promise<[string]> {
 		return this.client.say(target, message);
 	}
+
+	public whisper(target: string, message: string): Promise<[string, string]> {
+		return this.client.whisper(target, message);
+	}
 }

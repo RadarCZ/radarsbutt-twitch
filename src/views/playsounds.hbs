@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>{{ title }} - Radar's Butt's Web</title>
+	{{> styles }}
+</head>
+
+<body>
+	{{> top_menu }}
+	<div id="table-wrapper">
+		<table id="hbs-table">
+			<thead>
+				<tr>
+					<th>Playsound</th>
+					<th>Command</th>
+				</tr>
+			</thead>
+			<tbody>
+				{{#each @soundNames as |sound|}}
+				{{> sound_line sound=sound }}
+				{{/each}}
+			</tbody>
+		</table>
+	</div>
+
+	<script>
+		(function() {
+			const copyButtons = document.querySelectorAll("button.sound-copy_button");
+			copyButtons.forEach((button) => {
+				button.onclick = (event) => {
+					const inputToCopy = document.querySelector(`#${event.target.id}-input`);
+					inputToCopy.select();
+					console.log(document.execCommand('copy'));
+				}
+			})
+		})();
+	</script>
+</body>
+
+</html>

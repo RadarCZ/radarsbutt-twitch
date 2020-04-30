@@ -2,14 +2,16 @@ import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import path from 'path';
 import helmet from 'helmet';
+import http from 'http';
 
 import express, { Request, Response } from 'express';
 import 'express-async-errors';
-import { registerHelpers, buildMenu, registerCommands } from '@shared/functions';
+import { registerHelpers, buildMenu, registerCommands, registerPlaysounds } from '@shared/functions';
 import { TwitchOptions } from './twitch/TwitchOptions';
 import { TwitchClient } from './twitch/TwitchClient';
 import logger from '@shared/Logger';
 import { Handlers } from './twitch/Handlers';
+
 
 // Init express
 const app = express();
@@ -49,9 +51,18 @@ app.get('/commands', (req: Request, res: Response) => {
 	app.locals.activePage = 'commands';
 	res.render('commands', { title: 'Commands' });
 });
+app.get('/playsounds', (req: Request, res: Response) => {
+	app.locals.activePage = 'playsounds';
+	res.render('playsounds', { title: 'Playsounds' });
+});
+
+app.get(`/soundboard-${process.env.SOUNDBOARD_TOKEN}`, (req: Request, res: Response) => {
+	res.render('soundboard', { title: 'Soundboard', websocketPort: process.env.WEBSOCKET_PORT })
+})
 
 buildMenu(app);
 registerCommands(app);
+registerPlaysounds(app);
 
 if (!!process.env.TWITCH_BOT_USERNAME
 	&& process.env.TWITCH_BOT_OAUTH
@@ -63,4 +74,6 @@ if (!!process.env.TWITCH_BOT_USERNAME
   logger.warn('Unable to connect to Twitch, missing credentials (TWITCH_BOT_USERNAME, TWITCH_BOT_OAUTH, TWITCH_CHANNEL_NAME)');
 }
 
-export default app;
+const server = http.createServer(app);
+
+export default server;

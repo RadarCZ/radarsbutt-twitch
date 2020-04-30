@@ -3,3 +3,4 @@ env/*.env
 dist
 logs
 *.log
+src/public/soundboard/*

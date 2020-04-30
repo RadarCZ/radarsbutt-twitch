@@ -1,6 +1,6 @@
 {
   "name": "radarsbutt-twitch",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Twitch bot originally used for https://twitch.tv/radarcz",
   "repository": {
     "type": "git",
@@ -36,7 +36,8 @@
     "module-alias": "^2.2.2",
     "morgan": "^1.10.0",
     "tmi.js": "^1.5.0",
-    "winston": "^3.2.1"
+    "winston": "^3.2.1",
+    "ws": "^7.2.5"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
@@ -53,6 +54,7 @@
     "@types/node": "^13.13.2",
     "@types/supertest": "^2.0.8",
     "@types/tmi.js": "^1.4.0",
+    "@types/ws": "^7.2.4",
     "@typescript-eslint/eslint-plugin": "^2.29.0",
     "@typescript-eslint/parser": "^2.29.0",
     "eslint": "^6.8.0",
