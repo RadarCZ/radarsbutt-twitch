@@ -24,3 +24,9 @@
 	background-color: #85E783;
 	color: #000000;
 }
+
+#hbs-table a {
+    font-weight: bold;
+    color: yellow;
+    text-decoration: none;
+}

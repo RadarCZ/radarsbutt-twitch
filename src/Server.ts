@@ -4,6 +4,7 @@ import path from 'path';
 import helmet from 'helmet';
 import http from 'http';
 
+import { CronJob } from 'cron';
 import express, { Request, Response } from 'express';
 import 'express-async-errors';
 import { registerHelpers, buildMenu, registerCommands, registerPlaysounds } from '@shared/functions';
@@ -69,7 +70,10 @@ if (!!process.env.TWITCH_BOT_USERNAME
 	&& process.env.TWITCH_CHANNEL_NAME) {
   const options = new TwitchOptions(process.env.TWITCH_BOT_USERNAME, process.env.TWITCH_BOT_OAUTH, process.env.TWITCH_CHANNEL_NAME);
   TwitchClient.create(options, Handlers);
-  TwitchClient.getInstance().connect();
+  const client = TwitchClient.getInstance();
+  client.connect();
+  const twitchReminderJob = new CronJob('*/10 * * * *', client.remindBound);
+  twitchReminderJob.start();
 } else {
   logger.warn('Unable to connect to Twitch, missing credentials (TWITCH_BOT_USERNAME, TWITCH_BOT_OAUTH, TWITCH_CHANNEL_NAME)');
 }

@@ -11,15 +11,15 @@
 	<audio id='playsound' autoplay />
 	<script>
 		const port = {{ websocketPort }}
-		const messageContainer = document.querySelector('#server-message');
-		const ws = new WebSocket(`ws://${location.host}:${port}`);
+		const ws = new WebSocket(`ws://${location.hostname}:${port}`);
 
 		// event emmited when connected
 		ws.onopen = function () {
-			//console.log('websocket is connected ...')
-
-			// sending a send event to websocket server
-			ws.send('connected')
+			const data = {
+				message: 'GimmeNextYouFuck',
+				userstate: {},
+			}
+			ws.send(JSON.stringify(data))
 		}
 
 		// event emmited when receiving message 
