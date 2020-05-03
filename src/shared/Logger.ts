@@ -35,7 +35,8 @@ if (process.env.NODE_ENV === 'production') {
         format: fileFormat,
     });
     logger.add(errTransport);
-    logger.add(infoTransport);
+	logger.add(infoTransport);
+	logger.add(new Console({ format: format.simple()}))
 
 } else {
 

@@ -6,7 +6,10 @@ import logger from '@shared/Logger';
 import { ChatUserstate } from 'tmi.js';
 import { IncomingMessage } from 'http';
 
-const wss = new watersports.Server({ port: Number(process.env.WEBSOCKET_PORT || 3030) });
+const wssPort = Number(process.env.WEBSOCKET_PORT || 3030);
+const wss = new watersports.Server({ port: wssPort });
+
+logger.info(`Watersports Server started on port: ${wssPort}`);
 
 const soundCooldowns: Record<string, Date> = {};
 const queue: string[] = [];
@@ -19,6 +22,7 @@ export type IncomingTwitchWatersportMessage = {
 
 wss.on('connection', (ws: watersports, req: IncomingMessage) => {
 	ws.on('message', (message: string) => {
+		logger.info(JSON.stringify(soundCooldowns));
 		try {
 			const data: IncomingTwitchWatersportMessage = JSON.parse(message);
 
@@ -29,17 +33,22 @@ wss.on('connection', (ws: watersports, req: IncomingMessage) => {
 					return;
 				}
 
-				const shouldBeAvailableDate = new Date();
-				shouldBeAvailableDate.setMinutes(shouldBeAvailableDate.getMinutes() + Number(process.env.SOUNDBOARD_DEFAULT_COOLDOWN))
+				const shouldBeAvailableDate = new Date(soundCooldowns[soundId]);
+				logger.info(`The sound "${soundId}" was last played at '${shouldBeAvailableDate}'.`)
+				if (shouldBeAvailableDate.valueOf()) {
+					shouldBeAvailableDate.setMinutes(shouldBeAvailableDate.getMinutes() + Number(process.env.SOUNDBOARD_DEFAULT_COOLDOWN));
+				}
 
-				if (Object.keys(soundCooldowns).includes(soundId) && soundCooldowns[soundId] < shouldBeAvailableDate) {
+				if (shouldBeAvailableDate.valueOf() && soundCooldowns[soundId] < shouldBeAvailableDate) {
 					logger.info(`"${soundId}" on cooldown, next will be available at ${shouldBeAvailableDate.toLocaleString()}`);
 					return;
+				} else {
+					logger.info(`Adding a cooldown for the sound "${soundId}"`)
+					soundCooldowns[soundId] = new Date();
 				}
 
 				if (!isPlaying) {
 					isPlaying = true;
-					soundCooldowns[soundId] = new Date();
 					setTimeout(() => {
 						logger.info(`Sending immediately: ${soundId}`);
 						wss.clients.forEach((client) => {
@@ -50,7 +59,7 @@ wss.on('connection', (ws: watersports, req: IncomingMessage) => {
 					}, 5000);
 				} else {
 					queue.push(soundId);
-					logger.info(`Inserted "${soundId}" into the queue; whole queue is now:\n ${JSON.stringify(queue)}`);
+					logger.info(`Inserted "${soundId}" into the queue; whole queue is now ${JSON.stringify(queue)}`);
 				}
 
 				if (data.userstate.username) {
@@ -66,7 +75,6 @@ wss.on('connection', (ws: watersports, req: IncomingMessage) => {
 					setTimeout(() => {
 						logger.info(`Sending next from queue: ${soundId}`);
 						ws.send(soundId);
-						soundCooldowns[soundId] = new Date();
 					}, 5000);
 				} else {
 					isPlaying = false;

@@ -10,4 +10,5 @@ RUN npm run build
 RUN rm -rf ./src
 
 EXPOSE 8081
-CMD [ "npm", "start" ]
+EXPOSE 8080
+ENTRYPOINT [ "npm", "start" ]
