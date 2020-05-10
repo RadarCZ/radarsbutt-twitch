@@ -39,8 +39,17 @@ wss.on('connection', (ws: watersports, req: IncomingMessage) => {
 					shouldBeAvailableDate.setMinutes(shouldBeAvailableDate.getMinutes() + Number(process.env.SOUNDBOARD_DEFAULT_COOLDOWN));
 				}
 
-				if (shouldBeAvailableDate.valueOf() && soundCooldowns[soundId] < shouldBeAvailableDate) {
+				const currentDate = new Date();
+				const responseMessage = `Command to send sound "${soundId}" successfully sent.`;
+				if (shouldBeAvailableDate.valueOf() && currentDate < shouldBeAvailableDate) {
+					logger.info(`Condition "shouldBeAvailableDate.valueOf() (${shouldBeAvailableDate.valueOf()}) && new Date() (${new Date()}) < shouldBeAvailableDate (${shouldBeAvailableDate})" passed.`);
 					logger.info(`"${soundId}" on cooldown, next will be available at ${shouldBeAvailableDate.toLocaleString()}`);
+					if (data.userstate.username) {
+						const minuteDifference = shouldBeAvailableDate.getMinutes() - currentDate.getMinutes();
+						const client = TwitchClient.getInstance();
+						const actualMessage = `${responseMessage} Unfortunately, the sound is on cooldown, it will be available in ${minuteDifference} minute${minuteDifference === 1 ? '' : 's'}`;
+						client.whisper(data.userstate.username, actualMessage);
+					}
 					return;
 				} else {
 					logger.info(`Adding a cooldown for the sound "${soundId}"`)
@@ -64,7 +73,6 @@ wss.on('connection', (ws: watersports, req: IncomingMessage) => {
 
 				if (data.userstate.username) {
 					const client = TwitchClient.getInstance();
-					const responseMessage = `Command to send sound "${soundId}" successfully sent.`;
 					client.whisper(data.userstate.username, responseMessage);
 				}
 			} else if (data.message.startsWith('GimmeNextYouFuck')) {
