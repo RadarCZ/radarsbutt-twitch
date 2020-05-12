@@ -80,4 +80,4 @@ if (!!process.env.TWITCH_BOT_USERNAME
 
 const server = http.createServer(app);
 
-export default server;
+export const serverVars = { server, app };

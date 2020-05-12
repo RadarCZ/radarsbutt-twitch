@@ -1,5 +1,5 @@
 import watersports from 'ws';
-import server from '@server';
+import { serverVars } from '@server';
 import { TwitchClient } from '@twitch';
 
 import logger from '@shared/Logger';
@@ -30,6 +30,19 @@ wss.on('connection', (ws: watersports, req: IncomingMessage) => {
 				logger.info(`!playsound received => ${isPlaying}`);
 				const soundId = data.message.split(' ')[1];
 				if (!soundId) {
+					return;
+				}
+
+				const availableSoundNames: string[] = serverVars.app.locals.soundNames;
+				const soundIsAvailable: boolean = availableSoundNames && availableSoundNames.includes(soundId);
+
+				if(!soundIsAvailable) {
+					const error = `Sound "${soundId}" is not available (yet). Check http://radarsbutt.radarsoft.cz/playsounds for the list of supported playsounds.`;
+					if (data.userstate.username) {
+						const client = TwitchClient.getInstance();
+						client.whisper(data.userstate.username, error);
+					}
+					logger.info(error);
 					return;
 				}
 
@@ -98,4 +111,5 @@ wss.on('connection', (ws: watersports, req: IncomingMessage) => {
 	logger.info(`Client with IP ${req.socket.remoteAddress} connected.`);
 });
 
+const { server } = serverVars;
 export default server;
