@@ -65,17 +65,25 @@ buildMenu(app);
 registerCommands(app);
 registerPlaysounds(app);
 
+const envKeysForTwitchChannels = Object.keys(process.env).filter(key => key.startsWith('TWITCH_CHANNEL_NAME_'));
 if (!!process.env.TWITCH_BOT_USERNAME
 	&& process.env.TWITCH_BOT_OAUTH
-	&& process.env.TWITCH_CHANNEL_NAME) {
-  const options = new TwitchOptions(process.env.TWITCH_BOT_USERNAME, process.env.TWITCH_BOT_OAUTH, process.env.TWITCH_CHANNEL_NAME);
-  TwitchClient.create(options, Handlers);
-  const client = TwitchClient.getInstance();
-  client.connect();
-  const twitchReminderJob = new CronJob('*/10 * * * *', client.remindBound);
-  twitchReminderJob.start();
+	&& (envKeysForTwitchChannels && envKeysForTwitchChannels.length > 0)) {
+	const channels: string[] = envKeysForTwitchChannels.reduce((previousValue: string[], currentValue: string) => {
+		const actualChannelName = process.env[currentValue];
+		if (actualChannelName && !previousValue.includes(actualChannelName)) {
+			return [...previousValue, actualChannelName];
+		}
+		return [...previousValue];
+	},  []);
+  	const options = new TwitchOptions(process.env.TWITCH_BOT_USERNAME, process.env.TWITCH_BOT_OAUTH, channels);
+  	TwitchClient.create(options, Handlers);
+  	const client = TwitchClient.getInstance();
+  	client.connect();
+  	const twitchReminderJob = new CronJob('*/10 * * * *', client.remindBound);
+  	twitchReminderJob.start();
 } else {
-  logger.warn('Unable to connect to Twitch, missing credentials (TWITCH_BOT_USERNAME, TWITCH_BOT_OAUTH, TWITCH_CHANNEL_NAME)');
+  	logger.warn('Unable to connect to Twitch, missing credentials (TWITCH_BOT_USERNAME, TWITCH_BOT_OAUTH, TWITCH_CHANNEL_NAME)');
 }
 
 const server = http.createServer(app);

@@ -45,7 +45,11 @@ export class TwitchClient {
 			this.lastReminderIndex = 0;
 		}
 
-		RemiderCommands[this.lastReminderIndex].handler(process.env.TWITCH_CHANNEL_NAME || 'radarcz');
+		const channels = this.client.getChannels();
+		for(let i = 0, j = channels.length; i < j; i++) {
+			RemiderCommands[this.lastReminderIndex].handler(channels[i]);
+		}
+
 		this.lastReminderIndex++;
 	}
 
