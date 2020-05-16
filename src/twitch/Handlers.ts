@@ -11,6 +11,14 @@ export const Handlers: { event: keyof Events; listener: (...args: any[]) => void
 		}
 	},
 	{
+		'event': 'disconnected',
+		'listener': (reason: string): void => {
+			logger.info(`Bot was disconnected from Twitch IRC. Reason: "${reason}"`);
+			const client = TwitchClient.getInstance();
+			client.connect();
+		}
+	},
+	{
 		'event': 'message',
 		'listener': (channel: string, userState: ChatUserstate, message: string, self: boolean): void => {
 			if (self) {

@@ -22,12 +22,10 @@ export type IncomingTwitchWatersportMessage = {
 
 wss.on('connection', (ws: watersports, req: IncomingMessage) => {
 	ws.on('message', (message: string) => {
-		logger.info(JSON.stringify(soundCooldowns));
 		try {
 			const data: IncomingTwitchWatersportMessage = JSON.parse(message);
 
 			if (data.message.startsWith('!playsound ')) {
-				logger.info(`!playsound received => ${isPlaying}`);
 				const soundId = data.message.split(' ')[1];
 				if (!soundId) {
 					return;
@@ -55,7 +53,6 @@ wss.on('connection', (ws: watersports, req: IncomingMessage) => {
 				const currentDate = new Date();
 				const responseMessage = `Command to send sound "${soundId}" successfully sent.`;
 				if (shouldBeAvailableDate.valueOf() && currentDate < shouldBeAvailableDate) {
-					logger.info(`Condition "shouldBeAvailableDate.valueOf() (${shouldBeAvailableDate.valueOf()}) && new Date() (${new Date()}) < shouldBeAvailableDate (${shouldBeAvailableDate})" passed.`);
 					logger.info(`"${soundId}" on cooldown, next will be available at ${shouldBeAvailableDate.toLocaleString()}`);
 					if (data.userstate.username) {
 						const minuteDifference = shouldBeAvailableDate.getMinutes() - currentDate.getMinutes();
@@ -89,9 +86,8 @@ wss.on('connection', (ws: watersports, req: IncomingMessage) => {
 					client.whisper(data.userstate.username, responseMessage);
 				}
 			} else if (data.message.startsWith('GimmeNextYouFuck')) {
-				logger.info(`GimmeNextYouFuck received => ${isPlaying}`);
 				const soundId = queue.shift();
-				logger.info(`next sound in queue is "${soundId}"`)
+				logger.info(`Next sound in queue is "${soundId}"`)
 				if (soundId) {
 					setTimeout(() => {
 						logger.info(`Sending next from queue: ${soundId}`);
