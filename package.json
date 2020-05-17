@@ -1,6 +1,6 @@
 {
   "name": "radarsbutt-twitch",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "description": "Twitch bot originally used for https://twitch.tv/radarcz",
   "repository": {
     "type": "git",
@@ -12,7 +12,7 @@
     "start": "node -r module-alias/register ./dist",
     "start:dev": "nodemon --config nodemon.json",
     "test": "nodemon --config nodemon.test.json",
-    "docker:local": "docker-compose down && docker-compose build && docker-compose up -d && docker-compose logs -f"
+    "docker:local": "docker-compose up -d --build && docker-compose logs -f"
   },
   "license": "AGPL-3.0-or-later",
   "_moduleAliases": {

@@ -9,6 +9,4 @@ COPY . .
 RUN npm run build
 RUN rm -rf ./src
 
-EXPOSE 8081
-EXPOSE 8080
 ENTRYPOINT [ "npm", "start" ]

@@ -7,6 +7,6 @@ export class CommandsCommand implements ITwitchCommand {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	public handler: TwitchCommandHandler = (channel, userstate, message): void => {
 		const client = TwitchClient.getInstance();
-		client.say(channel, `The list of commands is here: http://${process.env.PRODUCTION_HOSTNAME}/commands`);
+		client.say(channel, `The list of commands is here: https://${process.env.PRODUCTION_HOSTNAME}/commands`);
 	}
 };
