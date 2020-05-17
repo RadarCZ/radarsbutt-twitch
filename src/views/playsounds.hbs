@@ -30,7 +30,7 @@
 			const copyButtons = document.querySelectorAll("button.sound-copy_button");
 			copyButtons.forEach((button) => {
 				button.onclick = (event) => {
-					const inputToCopy = document.querySelector(`#${event.target.id}-input`);
+					const inputToCopy = document.querySelector(`#input-${event.target.id}`);
 					inputToCopy.select();
 					console.log(document.execCommand('copy'));
 				}
