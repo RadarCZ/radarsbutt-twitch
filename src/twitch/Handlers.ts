@@ -2,6 +2,7 @@ import logger from '@shared/Logger';
 import { Events, ChatUserstate } from 'tmi.js';
 import { TwitchCommands } from '@shared/commands';
 import { TwitchClient } from '@twitch';
+import { restartApp } from '@shared/functions';
 
 export const Handlers: { event: keyof Events; listener: (...args: any[]) => void }[] = [
 	{
@@ -14,8 +15,7 @@ export const Handlers: { event: keyof Events; listener: (...args: any[]) => void
 		'event': 'disconnected',
 		'listener': (reason: string): void => {
 			logger.info(`Bot was disconnected from Twitch IRC. Reason: "${reason}"`);
-			const client = TwitchClient.getInstance();
-			client.connect();
+			restartApp();
 		}
 	},
 	{

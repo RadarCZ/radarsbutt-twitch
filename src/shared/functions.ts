@@ -2,12 +2,14 @@ import path from 'path';
 import fs from 'fs';
 
 import { cloneDeep } from 'lodash';
+import { exec } from 'child_process';
 
 import { TwitchCommands } from './commands';
 import { HbsHelpers } from './hbs-helpers';
 import { MenuLink } from './types/AppLocalsTypes';
-
 import logger from './Logger';
+import server, { wss } from '../WebSockets';
+
 import hbs = require('hbs');
 
 export const pErr: (err: Error) => void = err => {
@@ -57,4 +59,14 @@ export const registerPlaysounds: (app: any) => void = (app) => {
 	});
 
 	app.locals.soundNames = soundNames;
+}
+
+export const restartApp: () => void = () => {
+	server.close();
+	wss.close();
+	logger.info('Servers suspended, commiting restart.');
+	exec('npm start', () => {
+		logger.info('App restarted, killing old one.');
+		process.exit();
+	})
 }
