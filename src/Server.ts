@@ -58,7 +58,7 @@ app.get('/playsounds', (req: Request, res: Response) => {
 });
 
 app.get(`/soundboard-${process.env.SOUNDBOARD_TOKEN}`, (req: Request, res: Response) => {
-	res.render('soundboard', { title: 'Soundboard', websocketPort: process.env.WEBSOCKET_PORT })
+	res.render('soundboard', { title: 'Soundboard' })
 })
 
 buildMenu(app);

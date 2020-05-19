@@ -7,6 +7,6 @@ export class PlaysoundsCommand implements ITwitchCommand {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	public handler: TwitchCommandHandler = (channel, userstate, message): void => {
 		const client = TwitchClient.getInstance();
-		client.say(channel, `The list of available sounds is here: https://${process.env.PRODUCTION_HOSTNAME}/playsounds`);
+		client.say(channel, `The list of available sounds is here: https://${process.env.HOST}/playsounds`);
 	}
 };

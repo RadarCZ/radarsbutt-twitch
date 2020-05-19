@@ -6,10 +6,9 @@ import logger from '@shared/Logger';
 import { ChatUserstate } from 'tmi.js';
 import { IncomingMessage } from 'http';
 
-const wssPort = Number(process.env.WEBSOCKET_PORT || 3030);
-const wss = new watersports.Server({ port: wssPort });
+export const wss = new watersports.Server({ server: serverVars.server, path: '/websocket' });
 
-logger.info(`Watersports Server started on port: ${wssPort}`);
+logger.info(`Watersports Server started on port: ${process.env.PORT || 3000}`);
 
 const soundCooldowns: Record<string, Date> = {};
 const queue: string[] = [];
