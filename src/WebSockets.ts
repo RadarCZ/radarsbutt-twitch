@@ -90,11 +90,18 @@ wss.on('connection', (ws: watersports, req: IncomingMessage) => {
 				if (soundId) {
 					setTimeout(() => {
 						logger.info(`Sending next from queue: ${soundId}`);
-						ws.send(soundId);
+						wss.clients.forEach((client) => {
+							client.send(soundId);
+						});
 					}, 5000);
 				} else {
 					isPlaying = false;
 				}
+			} else if (data.message === 'BOOP') {
+				logger.info('BOOP received, sending BAP to all clients.')
+				wss.clients.forEach((client) => {
+					client.send('BAP');
+				});
 			} else {
 				return;
 			}

@@ -11,21 +11,45 @@
 	<audio id='playsound' autoplay />
 	<script>
 		const ws = new WebSocket(`wss://${location.hostname}/websocket`);
+		let isPlaying = false;
 
 		// event emmited when connected
 		ws.onopen = function () {
 			const data = {
 				message: 'GimmeNextYouFuck',
 				userstate: {},
-			}
-			ws.send(JSON.stringify(data))
+			};
+			ws.send(JSON.stringify(data));
+			window.setInterval(() => {
+				if(!isPlaying) {
+					ws.close();
+					location.reload();
+				}
+			}, 30000);
+		}
+
+		ws.onclose = function() {
+			ws.close();
+			location.reload();
+		}
+
+		ws.onerror = function(ev) {
+			alert(ev.data);
+			ws.close();
+			location.reload();
 		}
 
 		// event emmited when receiving message 
 		ws.onmessage = function (ev) {
+			if(ev.data === 'BAP') {
+				console.log('BAP received, connection alive.');
+				return;
+			}
+			isPlaying = true;
 			const audioTag = document.querySelector('#playsound');
 			audioTag.setAttribute('src', `/soundboard/${ev.data}.wav`);
 			audioTag.onended = (event) => {
+				ws.close();
 				location.reload();
 			}
 		}

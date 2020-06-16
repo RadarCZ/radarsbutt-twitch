@@ -21,6 +21,7 @@ export const Handlers: { event: keyof Events; listener: (...args: any[]) => void
 	{
 		'event': 'message',
 		'listener': (channel: string, userState: ChatUserstate, message: string, self: boolean): void => {
+			const ignoredCommands = [ 'tts' ];
 			if (self) {
 				return;
 			}
@@ -32,6 +33,10 @@ export const Handlers: { event: keyof Events; listener: (...args: any[]) => void
 			}
 
 			const command: string = (cleanMessage.split(' ')[0]).substring(1);
+
+			if (ignoredCommands.includes(command)) {
+				return;
+			}
 
 			const twitchCmd = TwitchCommands.find(cmd => cmd.name === command);
 
