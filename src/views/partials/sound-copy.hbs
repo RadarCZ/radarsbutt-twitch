@@ -1,6 +1,7 @@
 <div>
-    <input type="text" readonly="readonly" id="input-{{ sound }}" value="!playsound {{ sound }}" />
-    <button type="button" name="copyToken" title="Copy command to clipboard" id="{{ sound }}" class='sound-copy_button'>
+    <label for="input-{{ sound }}"></label>
+    <input type="text" readonly="readonly" id="input-{{ sound }}" value="{{ sound }}" />
+    <button type="button" name="copyToken" title="Copy name to clipboard" id="{{ sound }}" class='sound-copy_button'>
         Copy
     </button>
 </div>
