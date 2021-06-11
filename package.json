@@ -38,7 +38,7 @@
     "morgan": "^1.10.0",
     "tmi.js": "^1.5.0",
     "winston": "^3.2.1",
-    "ws": "^7.2.5"
+    "ws": "^7.4.6"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
